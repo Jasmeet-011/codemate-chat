@@ -1,9 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 import ChatMessage from '@/components/ChatMessage';
@@ -32,8 +30,9 @@ const Index = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark' || 
-        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });
@@ -160,12 +159,12 @@ export default Counter;`
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col">
-          {/* Header - ChatGPT style */}
-          <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
+          {/* Header */}
+          <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
             <div className="flex h-14 items-center justify-between px-4">
               <div className="flex items-center space-x-3">
-                <SidebarTrigger />
-                <h1 className="text-lg font-medium text-foreground">Codemate</h1>
+                <SidebarTrigger className="h-7 w-7" />
+                <h1 className="text-lg font-semibold text-foreground">Codemate</h1>
               </div>
               
               <div className="flex items-center space-x-3">
@@ -173,7 +172,7 @@ export default Counter;`
                   onClick={toggleTheme}
                   variant="ghost"
                   size="sm"
-                  className="h-8 w-8 p-0"
+                  className="h-8 w-8 p-0 hover:bg-accent"
                 >
                   {isDarkMode ? (
                     <Sun className="h-4 w-4" />
@@ -185,20 +184,20 @@ export default Counter;`
             </div>
           </header>
 
-          {/* Chat Messages - ChatGPT style */}
+          {/* Chat Messages */}
           <div className="flex-1 overflow-y-auto">
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto max-w-4xl">
               {messages.map((message) => (
-                <div key={message.id} className="group border-b border-border/50 py-6 px-4">
+                <div key={message.id} className="group border-b border-border/30 py-6 px-4 hover:bg-accent/20 transition-colors duration-200">
                   <ChatMessage message={message} />
                 </div>
               ))}
               
               {isTyping && (
-                <div className="group border-b border-border/50 py-6 px-4">
+                <div className="group border-b border-border/30 py-6 px-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-medium text-sm">AI</span>
+                      <span className="text-white font-medium text-sm">C</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex space-x-1 pt-1">
@@ -214,24 +213,24 @@ export default Counter;`
             </div>
           </div>
 
-          {/* Input Area - ChatGPT style */}
-          <div className="border-t bg-background">
-            <div className="mx-auto max-w-3xl px-4 py-4">
-              <div className="relative bg-background border border-border rounded-lg shadow-sm">
+          {/* Input Area */}
+          <div className="border-t border-border/40 bg-background/80 backdrop-blur-sm">
+            <div className="mx-auto max-w-4xl px-4 py-4">
+              <div className="relative bg-background border border-border/60 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
                 <Textarea
                   ref={textareaRef}
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="Message Codemate..."
-                  className="min-h-[52px] max-h-32 border-0 resize-none bg-transparent px-4 py-3 pr-12 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="min-h-[52px] max-h-32 border-0 resize-none bg-transparent px-4 py-3 pr-12 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/60"
                   rows={1}
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
                   size="sm"
-                  className="absolute bottom-2 right-2 h-8 w-8 p-0 bg-primary hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
+                  className="absolute bottom-2 right-2 h-8 w-8 p-0 bg-primary hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground rounded-lg transition-all duration-200"
                 >
                   <Send className="h-4 w-4" />
                 </Button>

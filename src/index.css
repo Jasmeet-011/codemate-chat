@@ -103,6 +103,25 @@
   .typing-indicator {
     animation: typingPulse 1.5s ease-in-out infinite;
   }
+
+  /* Enhanced sidebar animations */
+  .sidebar-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Smooth hover effects */
+  .hover-lift {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .hover-lift:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
 }
 
 @keyframes messageSlideIn {
@@ -125,7 +144,7 @@
   }
 }
 
-/* Custom scrollbar */
+/* Enhanced scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -135,32 +154,42 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: hsl(var(--muted-foreground) / 0.2);
   border-radius: 3px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
-}
-
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-thumb {
   background: hsl(var(--muted-foreground) / 0.4);
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+}
+
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.6);
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Improved focus states */
+.focus-visible-ring {
+  @apply focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+/* Backdrop blur support */
+@supports (backdrop-filter: blur(0)) {
+  .backdrop-blur-fallback {
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 /* Auto-resize textarea */
 .auto-resize {
   resize: none;
   overflow: hidden;
-}
-
-/* Smooth transitions */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }

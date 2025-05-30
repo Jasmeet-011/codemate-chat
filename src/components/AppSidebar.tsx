@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, MessageSquare, Settings, User, Code, Github, Book, History } from 'lucide-react';
+import { Plus, MessageSquare, Settings, User, Book, HelpCircle, History, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -8,91 +8,135 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
+  useSidebar,
 } from '@/components/ui/sidebar';
 
 export function AppSidebar() {
-  const conversations = [
+  const { state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === 'collapsed';
+
+  const mainItems = [
+    {
+      title: "New Chat",
+      icon: Plus,
+      url: "#",
+      isAction: true
+    }
+  ];
+
+  const conversationItems = [
     { id: 1, title: 'React Component Help', timestamp: '2 hours ago' },
     { id: 2, title: 'JavaScript Functions', timestamp: 'Yesterday' },
     { id: 3, title: 'API Integration', timestamp: '2 days ago' },
     { id: 4, title: 'CSS Grid Layout', timestamp: '1 week ago' },
+    { id: 5, title: 'TypeScript Types', timestamp: '1 week ago' },
+    { id: 6, title: 'Database Design', timestamp: '2 weeks ago' },
   ];
 
-  const navigationItems = [
-    {
-      title: "Profile",
-      icon: User,
-      url: "#"
-    },
+  const footerItems = [
     {
       title: "Settings",
       icon: Settings,
       url: "#"
     },
     {
-      title: "Documentation",
+      title: "Documentation", 
       icon: Book,
       url: "#"
     },
     {
-      title: "GitHub",
-      icon: Github,
+      title: "Help & Support",
+      icon: HelpCircle,
       url: "#"
     }
   ];
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <div className="flex items-center space-x-2 px-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <Code className="h-4 w-4 text-white" />
+    <Sidebar 
+      collapsible="icon" 
+      className="border-r border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    >
+      {/* Header */}
+      <SidebarHeader className="border-b border-border/40 px-3 py-4">
+        <div className="flex items-center justify-between">
+          <div className={`flex items-center space-x-3 transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+            <div className="w-7 h-7 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-sm">C</span>
+            </div>
+            <span className="font-semibold text-foreground truncate">Codemate</span>
           </div>
-          <span className="font-semibold group-data-[collapsible=icon]:hidden">Codemate</span>
+          
+          <Button
+            onClick={toggleSidebar}
+            variant="ghost"
+            size="sm"
+            className="h-7 w-7 p-0 hover:bg-accent ml-auto flex-shrink-0"
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </Button>
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      {/* Content */}
+      <SidebarContent className="px-2 py-2">
+        {/* New Chat Button */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Button className="w-full justify-start bg-blue-600 hover:bg-blue-700 text-white">
-                    <Plus className="h-4 w-4" />
-                    <span className="group-data-[collapsible=icon]:hidden">New Chat</span>
-                  </Button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {mainItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton 
+                    asChild 
+                    className="h-11 px-3 mb-2 bg-accent/50 hover:bg-accent text-accent-foreground font-medium rounded-lg transition-all duration-200 group-data-[collapsible=icon]:h-9 group-data-[collapsible=icon]:w-9 group-data-[collapsible=icon]:p-0"
+                    tooltip={isCollapsed ? item.title : undefined}
+                  >
+                    <a href={item.url} className="flex items-center">
+                      <item.icon className="h-4 w-4 flex-shrink-0" />
+                      <span className="ml-3 group-data-[collapsible=icon]:hidden">
+                        {item.title}
+                      </span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarSeparator />
-
+        {/* Recent Conversations */}
         <SidebarGroup>
-          <SidebarGroupLabel>
-            <History className="h-4 w-4" />
-            <span className="group-data-[collapsible=icon]:hidden">Recent Conversations</span>
-          </SidebarGroupLabel>
           <SidebarGroupContent>
+            {!isCollapsed && (
+              <div className="px-3 py-2 mb-2">
+                <div className="flex items-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <History className="h-3 w-3 mr-2" />
+                  Recent
+                </div>
+              </div>
+            )}
             <SidebarMenu>
-              {conversations.map((conversation) => (
+              {conversationItems.map((conversation) => (
                 <SidebarMenuItem key={conversation.id}>
-                  <SidebarMenuButton asChild>
-                    <a href="#" className="flex items-start space-x-3">
-                      <MessageSquare className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                      <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-                        <p className="text-sm font-medium truncate">
+                  <SidebarMenuButton 
+                    asChild
+                    className="h-9 px-3 hover:bg-accent/50 rounded-lg transition-all duration-200 group-data-[collapsible=icon]:h-9 group-data-[collapsible=icon]:w-9 group-data-[collapsible=icon]:p-0"
+                    tooltip={isCollapsed ? conversation.title : undefined}
+                  >
+                    <a href="#" className="flex items-start">
+                      <MessageSquare className="h-4 w-4 text-muted-foreground/70 mt-0.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0 ml-3 group-data-[collapsible=icon]:hidden">
+                        <p className="text-sm font-medium truncate text-foreground/90">
                           {conversation.title}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-muted-foreground/70 truncate">
                           {conversation.timestamp}
                         </p>
                       </div>
@@ -105,14 +149,21 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      {/* Footer */}
+      <SidebarFooter className="border-t border-border/40 px-2 py-2">
         <SidebarMenu>
-          {navigationItems.map((item) => (
+          {footerItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
+              <SidebarMenuButton 
+                asChild 
+                tooltip={isCollapsed ? item.title : undefined}
+                className="h-9 px-3 hover:bg-accent/50 rounded-lg transition-all duration-200 group-data-[collapsible=icon]:h-9 group-data-[collapsible=icon]:w-9 group-data-[collapsible=icon]:p-0"
+              >
+                <a href={item.url} className="flex items-center">
+                  <item.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <span className="ml-3 text-sm group-data-[collapsible=icon]:hidden">
+                    {item.title}
+                  </span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
