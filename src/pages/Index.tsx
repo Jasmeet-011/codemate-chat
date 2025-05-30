@@ -165,7 +165,7 @@ export default Counter;`
             <div className="flex h-14 items-center justify-between px-4">
               <div className="flex items-center space-x-3">
                 <SidebarTrigger />
-                <h1 className="text-lg font-medium text-foreground">ChatGPT</h1>
+                <h1 className="text-lg font-medium text-foreground">Codemate</h1>
               </div>
               
               <div className="flex items-center space-x-3">
@@ -223,7 +223,7 @@ export default Counter;`
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  placeholder="Message ChatGPT..."
+                  placeholder="Message Codemate..."
                   className="min-h-[52px] max-h-32 border-0 resize-none bg-transparent px-4 py-3 pr-12 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                   rows={1}
                 />

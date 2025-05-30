@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { User, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -94,7 +93,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       {/* Message Content */}
       <div className="flex-1 space-y-2 overflow-hidden">
         <div className="text-sm font-medium text-foreground">
-          {isUser ? 'You' : 'ChatGPT'}
+          {isUser ? 'You' : 'Codemate'}
         </div>
         
         <div className="prose prose-sm max-w-none text-foreground/90">
