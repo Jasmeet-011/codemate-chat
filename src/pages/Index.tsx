@@ -11,7 +11,7 @@ import ChatMessage from '@/components/ChatMessage';
 interface Message {
   id: string;
   content: string;
-  sender: 'user' | 'assistant';
+  sender: 'user' | 'ai';
   timestamp: Date;
   code?: {
     language: string;
@@ -24,7 +24,7 @@ const Index = () => {
     {
       id: '1',
       content: 'Hello! I\'m Codemate, your AI coding assistant. How can I help you today?',
-      sender: 'assistant',
+      sender: 'ai',
       timestamp: new Date(),
     },
   ]);
@@ -122,7 +122,7 @@ export default Counter;`
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: randomResponse.content,
-        sender: 'assistant',
+        sender: 'ai',
         timestamp: new Date(),
         code: randomResponse.code,
       };
@@ -160,50 +160,52 @@ export default Counter;`
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <SidebarInset className="flex flex-col">
-          {/* Header */}
-          <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex h-16 items-center justify-between px-6">
-              <div className="flex items-center space-x-4">
+          {/* Header - ChatGPT style */}
+          <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
+            <div className="flex h-14 items-center justify-between px-4">
+              <div className="flex items-center space-x-3">
                 <SidebarTrigger />
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">C</span>
-                  </div>
-                  <h1 className="text-xl font-semibold">Codemate</h1>
-                </div>
+                <h1 className="text-lg font-medium text-foreground">ChatGPT</h1>
               </div>
               
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Sun className="h-4 w-4" />
-                  <Switch
-                    checked={isDarkMode}
-                    onCheckedChange={toggleTheme}
-                    aria-label="Toggle dark mode"
-                  />
-                  <Moon className="h-4 w-4" />
-                </div>
+              <div className="flex items-center space-x-3">
+                <Button
+                  onClick={toggleTheme}
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                >
+                  {isDarkMode ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
+                </Button>
               </div>
             </div>
           </header>
 
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto px-6 py-4">
-            <div className="max-w-4xl mx-auto space-y-6">
+          {/* Chat Messages - ChatGPT style */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-3xl">
               {messages.map((message) => (
-                <ChatMessage key={message.id} message={message} />
+                <div key={message.id} className="group border-b border-border/50 py-6 px-4">
+                  <ChatMessage message={message} />
+                </div>
               ))}
               
               {isTyping && (
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm">C</span>
-                  </div>
-                  <div className="flex-1 bg-muted rounded-lg p-4">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="group border-b border-border/50 py-6 px-4">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-medium text-sm">AI</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex space-x-1 pt-1">
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -212,31 +214,28 @@ export default Counter;`
             </div>
           </div>
 
-          {/* Input Area */}
-          <div className="sticky bottom-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-6">
-            <div className="max-w-4xl mx-auto">
-              <div className="relative">
+          {/* Input Area - ChatGPT style */}
+          <div className="border-t bg-background">
+            <div className="mx-auto max-w-3xl px-4 py-4">
+              <div className="relative bg-background border border-border rounded-lg shadow-sm">
                 <Textarea
                   ref={textareaRef}
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  placeholder="Ask me anything about coding..."
-                  className="min-h-[50px] max-h-[120px] pr-12 resize-none auto-resize"
+                  placeholder="Message ChatGPT..."
+                  className="min-h-[52px] max-h-32 border-0 resize-none bg-transparent px-4 py-3 pr-12 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                   rows={1}
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
                   size="sm"
-                  className="absolute bottom-2 right-2 h-8 w-8 p-0"
+                  className="absolute bottom-2 right-2 h-8 w-8 p-0 bg-primary hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
                 >
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                Press Enter to send, Shift+Enter for new line
-              </p>
             </div>
           </div>
         </SidebarInset>

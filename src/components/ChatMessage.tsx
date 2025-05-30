@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { User, Bot, Copy, Check } from 'lucide-react';
+import { User, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CodeBlock from './CodeBlock';
 
@@ -40,7 +40,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         const textContent = content.slice(lastIndex, match.index);
         if (textContent.trim()) {
           parts.push(
-            <div key={`text-${lastIndex}`} className="whitespace-pre-wrap">
+            <div key={`text-${lastIndex}`} className="whitespace-pre-wrap leading-7">
               {textContent}
             </div>
           );
@@ -66,59 +66,58 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       const remainingText = content.slice(lastIndex);
       if (remainingText.trim()) {
         parts.push(
-          <div key={`text-${lastIndex}`} className="whitespace-pre-wrap">
+          <div key={`text-${lastIndex}`} className="whitespace-pre-wrap leading-7">
             {remainingText}
           </div>
         );
       }
     }
 
-    return parts.length > 0 ? parts : <div className="whitespace-pre-wrap">{content}</div>;
+    return parts.length > 0 ? parts : <div className="whitespace-pre-wrap leading-7">{content}</div>;
   };
 
   return (
-    <div className={`flex items-start space-x-3 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
+    <div className="flex items-start space-x-4 w-full">
+      {/* Avatar */}
       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
         isUser 
-          ? 'bg-gradient-to-br from-green-500 to-green-600' 
-          : 'bg-gradient-to-br from-blue-500 to-purple-600'
+          ? 'bg-primary text-primary-foreground' 
+          : 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white'
       }`}>
         {isUser ? (
-          <User className="h-4 w-4 text-white" />
+          <User className="h-4 w-4" />
         ) : (
-          <Bot className="h-4 w-4 text-white" />
+          <span className="font-medium text-sm">AI</span>
         )}
       </div>
       
-      <div className={`group relative max-w-[85%] ${isUser ? 'ml-auto' : 'mr-auto'}`}>
-        <div className={`rounded-lg px-4 py-3 shadow-sm border ${
-          isUser 
-            ? 'bg-blue-600 text-white border-blue-600' 
-            : 'bg-white text-gray-900 border-gray-200'
-        }`}>
-          <div className="text-sm leading-relaxed">
-            {renderContent(message.content)}
-          </div>
+      {/* Message Content */}
+      <div className="flex-1 space-y-2 overflow-hidden">
+        <div className="text-sm font-medium text-foreground">
+          {isUser ? 'You' : 'ChatGPT'}
         </div>
         
+        <div className="prose prose-sm max-w-none text-foreground/90">
+          {renderContent(message.content)}
+        </div>
+        
+        {/* Copy button for AI messages */}
         {!isUser && (
-          <Button
-            onClick={handleCopy}
-            variant="ghost"
-            size="sm"
-            className="absolute top-2 right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-100 hover:bg-gray-200"
-          >
-            {copied ? (
-              <Check className="h-3 w-3 text-green-600" />
-            ) : (
-              <Copy className="h-3 w-3 text-gray-600" />
-            )}
-          </Button>
+          <div className="flex items-center space-x-2 pt-2">
+            <Button
+              onClick={handleCopy}
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              {copied ? (
+                <Check className="h-3 w-3 text-green-600" />
+              ) : (
+                <Copy className="h-3 w-3" />
+              )}
+            </Button>
+          </div>
         )}
-        
-        <div className={`mt-1 text-xs text-gray-500 ${isUser ? 'text-right' : 'text-left'}`}>
-          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-        </div>
       </div>
     </div>
   );
