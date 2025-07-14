@@ -3,5 +3,5 @@ const app = require("./app.config");
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Codemate backend running at http://localhost:${PORT}`);
+  console.log(`🚀 Codemate backend running on http://localhost:${PORT}`);
 });
